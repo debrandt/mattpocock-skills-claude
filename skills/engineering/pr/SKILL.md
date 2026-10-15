@@ -7,6 +7,8 @@ metadata:
     author: Dex Horthy
     organisation: Humanlayer
     url: "https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md"
+model: sonnet
+effort: low
 ---
 
 Use this template for writing the PR body:
