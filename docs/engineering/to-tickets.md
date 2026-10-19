@@ -36,7 +36,7 @@ The edges are the point of the artifact. They work in two ways, depending on the
 
 | Tracker | Where the edges live | How you work them |
 | --- | --- | --- |
-| Local markdown | Text in one file per ticket under `.scratch/<feature>/issues/<NN>-<slug>.md`, numbered blockers-first | Top to bottom, by hand |
+| Local markdown | Frontmatter links (`blocked_by`, plus a `parent` link to the spec) in one file per ticket under `.scratch/<feature>/issues/<NN>-<slug>.md`, numbered blockers-first | Top to bottom by hand, or from the Frontier view when `.scratch/` is open in Obsidian |
 | A real tracker (GitHub, Linear) | Native blocking links, or sub-issues where the tracker has them | Any ticket whose blockers are done is on the **frontier** and can be grabbed |
 
 The edges live in the ticket either way. The tracker only decides whether anything can act on them in parallel. `to-tickets` produces the artifact; running it (one session at a time, or a fleet) is your job, not the skill's.

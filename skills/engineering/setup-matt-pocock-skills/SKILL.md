@@ -27,7 +27,7 @@ Look at the current repo to understand its starting state. Read whatever exists;
 - `GLOSSARY.md` and `GLOSSARY-MAP.md` at the repo root
 - `docs/adr/` and any `src/*/docs/adr/` directories
 - `docs/agents/`: does this skill's prior output already exist?
-- `.scratch/`: a sign that a local-markdown issue tracker convention is already in use
+- `.scratch/`: a sign that a local-markdown issue tracker convention is already in use. If its issue files keep metadata in body lines (`Status:`, `Blocked by:`), lack a `parent` property, or the tracker doc has no `## Frontmatter` section, it is in an older shape: read [migrate-local-markdown.md](./migrate-local-markdown.md) and run it as part of step 4
 - Is the `triage` skill installed? (a `triage` skill folder alongside this one, or `triage` in your available skills.) This decides whether Section B runs at all.
 - Monorepo signals: a `pnpm-workspace.yaml`, a `workspaces` field in `package.json`, or a populated `packages/*` with its own `src/`. These are present only in a genuinely large multi-package repo; their absence means single-context, which is almost every repo.
 
@@ -45,7 +45,7 @@ Default posture: these skills were designed for GitHub. If a `git remote` points
 
 - **GitHub**: issues live in the repo's GitHub Issues (uses the `gh` CLI)
 - **GitLab**: issues live in the repo's GitLab Issues (uses the [`glab`](https://gitlab.com/gitlab-org/cli) CLI)
-- **Local markdown**: issues live as files under `.scratch/<feature>/` in this repo (good for solo projects or repos without a remote)
+- **Local markdown**: issues live as files under `.scratch/<feature>/` in this repo, with metadata in frontmatter so `.scratch/` opens as an Obsidian vault (good for solo projects or repos without a remote)
 - **Other** (Jira, Linear, etc.): ask the user to describe the workflow in one paragraph; the skill will record it as freeform prose
 
 Record the choice in `docs/agents/issue-tracker.md`. The GitHub and GitLab templates carry a "PRs as a request surface" flag, defaulted **off**. Leave it off and don't raise it: a user who wants external PRs in the triage queue can flip the flag in the file later.
@@ -109,7 +109,7 @@ Then write the docs files using the seed templates in this skill folder as a sta
 
 - [issue-tracker-github.md](./issue-tracker-github.md): GitHub issue tracker
 - [issue-tracker-gitlab.md](./issue-tracker-gitlab.md): GitLab issue tracker
-- [issue-tracker-local.md](./issue-tracker-local.md): local-markdown issue tracker
+- [issue-tracker-local.md](./issue-tracker-local.md): local-markdown issue tracker. Also write [overview.base](./overview.base) to `.scratch/overview.base` when no file exists there.
 - [triage-labels.md](./triage-labels.md): label mapping (only if `triage` is installed)
 - [domain.md](./domain.md): domain doc consumer rules + layout
 
@@ -117,4 +117,4 @@ For "other" issue trackers, write `docs/agents/issue-tracker.md` from scratch us
 
 ### 5. Done
 
-Tell the user the setup is complete and which engineering skills will now read from these files. Mention they can edit `docs/agents/*.md` directly later; re-running this skill is only necessary if they want to switch issue trackers or restart from scratch.
+Tell the user the setup is complete and which engineering skills will now read from these files. Mention they can edit `docs/agents/*.md` directly later; re-running this skill is only necessary if they want to switch issue trackers, migrate a local-markdown tracker to the current format, or restart from scratch.

@@ -1,0 +1,115 @@
+filters:
+  and:
+    - file.ext == "md"
+    - or:
+        - file.name == "spec.md"
+        - file.name == "map.md"
+        - file.folder.endsWith("/issues")
+formulas:
+  feature: file.path.split("/")[0]
+  kind: if(file.folder.endsWith("/issues"), "issue", file.basename)
+  closed: '["resolved", "wontfix"].contains(status)'
+  open_blockers: if(blocked_by, blocked_by.filter(!["resolved", "wontfix"].contains(value.asFile().properties.status)), [])
+  blocked: formula.open_blockers.length > 0
+properties:
+  file.name:
+    displayName: File
+  formula.feature:
+    displayName: Feature
+  formula.kind:
+    displayName: Kind
+  status:
+    displayName: Status
+  type:
+    displayName: Type
+  parent:
+    displayName: Parent
+  blocked_by:
+    displayName: Blocked by
+  formula.open_blockers:
+    displayName: Open blockers
+  file.mtime:
+    displayName: Modified
+views:
+  - type: table
+    name: Overview
+    groupBy:
+      property: formula.feature
+      direction: ASC
+    order:
+      - file.name
+      - formula.kind
+      - status
+      - type
+      - parent
+      - formula.open_blockers
+      - file.mtime
+    sort:
+      - property: formula.kind
+        direction: DESC
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Frontier
+    filters:
+      and:
+        - formula.kind == "issue"
+        - "!formula.closed"
+        - status != "claimed"
+        - "!formula.blocked"
+    groupBy:
+      property: formula.feature
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - type
+      - file.mtime
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Claimed
+    filters:
+      and:
+        - status == "claimed"
+    groupBy:
+      property: formula.feature
+      direction: ASC
+    order:
+      - file.name
+      - type
+      - file.mtime
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Blocked
+    filters:
+      and:
+        - "!formula.closed"
+        - formula.blocked
+    groupBy:
+      property: formula.feature
+      direction: ASC
+    order:
+      - file.name
+      - status
+      - type
+      - formula.open_blockers
+    sort:
+      - property: file.name
+        direction: ASC
+  - type: table
+    name: Specs & maps
+    filters:
+      and:
+        - formula.kind != "issue"
+    order:
+      - formula.feature
+      - file.name
+      - status
+      - file.mtime
+    sort:
+      - property: formula.feature
+        direction: ASC
